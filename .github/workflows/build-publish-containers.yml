@@ -103,6 +103,7 @@ jobs:
           docker buildx imagetools create -t ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }} \
             ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-amd64 \
             ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-arm64
+          docker buildx imagetools inspect ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}
 #          docker manifest create \
 #            ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }} \
 #            --amend ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-amd64 \
