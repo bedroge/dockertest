@@ -1,16 +1,12 @@
-name: Build and publish EESSI container images
+\name: Build and publish EESSI container images
 on:
   push:
     branches:
       - main
-    paths:
-      - Dockerfile
 
   pull_request:
     branches:
       - main
-    paths:
-      - Dockerfile
 
   # also rebuild the containers for new releases of filesystem-layer:
   # this often means that we have a new CVMFS configuration package
@@ -62,14 +58,12 @@ jobs:
       - name: Convert and store repository owner in lowercase, replace colon in tag names by hyphen
         run: |
           echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-          tag=${{ matrix.tag }}
-          echo DOCKERFILE=Dockerfile.EESSI-${tag//:/-} >> $GITHUB_ENV
 
       - name: Build and push to GitHub Packages
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5 #v3.2.0
         with:
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-${{ matrix.platform }}
-          file: containers/${{ env.DOCKERFILE }}
+          file: Dockerfile
           platforms: linux/${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           cache-from: type=local,src=/tmp/.buildx-cache
