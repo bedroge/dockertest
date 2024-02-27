@@ -26,7 +26,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        tag: ['client:centos7']
+        tag: ['build-node:debian12']
         platform: [amd64, arm64]
 
     steps:
@@ -63,7 +63,7 @@ jobs:
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5 #v3.2.0
         with:
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-${{ matrix.platform }}
-          file: Dockerfile
+          file: Dockerfile.EESSI-build-node-debian12
           platforms: linux/${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           cache-from: type=local,src=/tmp/.buildx-cache
