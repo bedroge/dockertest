@@ -27,7 +27,8 @@ jobs:
     strategy:
       matrix:
         tag: ['build-node:debian12']
-        platform: [amd64, arm64]
+        platform: [amd64]
+        #platform: [amd64, arm64]
 
     steps:
       - name: Check out the repo
@@ -74,36 +75,36 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  create_manifest:
-    name: Create the Docker manifest
-    needs: build_and_publish
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    strategy:
-      matrix:
-        tag: ['client:centos7']
-    steps:
-      - name: Login to GitHub Container Registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Convert and store repository owner in lowercase
-        run: |
-          echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-
-      - name: Run docker buildx imagetools create
-        if: github.event_name != 'pull_request'
-        run: |
-          docker buildx imagetools create -t ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }} \
-            ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-amd64 \
-            ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-arm64 \
-
-      - name: Inspect the final image
-        if: github.event_name != 'pull_request'
-        run: docker buildx imagetools inspect ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}
+#  create_manifest:
+#    name: Create the Docker manifest
+#    needs: build_and_publish
+#    runs-on: ubuntu-latest
+#    permissions:
+#      packages: write
+#      contents: read
+#    strategy:
+#      matrix:
+#        tag: ['client:centos7']
+#    steps:
+#      - name: Login to GitHub Container Registry
+#        if: github.event_name != 'pull_request'
+#        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Convert and store repository owner in lowercase
+#        run: |
+#          echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+#
+#      - name: Run docker buildx imagetools create
+#        if: github.event_name != 'pull_request'
+#        run: |
+#          docker buildx imagetools create -t ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }} \
+#            ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-amd64 \
+#            ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}-arm64 \
+#
+#      - name: Inspect the final image
+#        if: github.event_name != 'pull_request'
+#        run: docker buildx imagetools inspect ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ matrix.tag }}
