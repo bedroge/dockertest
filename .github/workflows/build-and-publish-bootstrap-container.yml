@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - Dockerfile.bootstrap-prefix-debian11
+      - Dockerfile.bootstrap-prefix-debian*
       - bootstrap-prefix.sh
 
   pull_request:
