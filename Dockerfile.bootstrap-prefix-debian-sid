@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install -y gcc g++ make diffutils libgmp-dev perl wget
 RUN apt-get install -y git python3-pip python3-cryptography python3-venv
 RUN python3 -m venv --system-site-packages /opt/ansible && \
-    source /opt/ansible/bin/activate && \
+    . /opt/ansible/bin/activate && \
     pip3 install --upgrade pip && \
     pip3 install ansible && \
     ln -s /opt/ansible/bin/ansible-playbook /usr/local/bin/ansible-playbook && \
