@@ -1,4 +1,5 @@
-FROM debian:sid-slim
+#FROM debian:sid-slim
+FROM ubuntu:22.04
 
 COPY bootstrap-prefix.sh /usr/local/bin/bootstrap-prefix.sh
 
