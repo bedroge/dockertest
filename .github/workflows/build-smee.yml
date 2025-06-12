@@ -33,5 +33,5 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: smee:latest
+          tags: smee
           file: Dockerfile.smee
